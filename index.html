@@ -1,0 +1,726 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>零售智能中台 · Retail AI Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=39" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<!-- ============ 侧边导航 ============ -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-logo">R</div>
+    <div class="brand-text">
+      <h1>Retail AI Hub</h1>
+      <span>零售人的打工搭子 · 卖货不愁</span>
+    </div>
+    <button class="sidebar-toggle" id="sidebarToggle" title="折叠菜单">‹</button>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-group">概览</div>
+    <a href="#dashboard" class="nav-item active" data-module="dashboard">
+      <span class="nav-ico">◎</span><span class="nav-label">数据看板</span>
+    </a>
+
+    <div class="nav-group">智能运营</div>
+    <a href="#smart-store" class="nav-item" data-module="smart-store">
+      <span class="nav-ico">▣</span><span class="nav-label">智慧门店</span>
+    </a>
+    <a href="#forecast" class="nav-item" data-module="forecast">
+      <span class="nav-ico">↗</span><span class="nav-label">销量预测</span>
+    </a>
+    <a href="#behavior" class="nav-item" data-module="behavior">
+      <span class="nav-ico">◐</span><span class="nav-label">用户行为分析</span>
+    </a>
+    <a href="#ads" class="nav-item" data-module="ads">
+      <span class="nav-ico">◈</span><span class="nav-label">广告个性化</span>
+    </a>
+    <a href="#search" class="nav-item" data-module="search">
+      <span class="nav-ico">⌕</span><span class="nav-label">商品搜索推荐</span>
+    </a>
+
+    <div class="nav-group">AI 生产力</div>
+    <a href="#digital-employee" class="nav-item" data-module="digital-employee">
+      <span class="nav-ico">✦</span><span class="nav-label">数字员工</span>
+    </a>
+    <a href="#service" class="nav-item" data-module="service">
+      <span class="nav-ico">✉</span><span class="nav-label">售前售后客服</span>
+    </a>
+    <a href="#copy-design" class="nav-item" data-module="copy-design">
+      <span class="nav-ico">▤</span><span class="nav-label">文案视频设计</span>
+    </a>
+    <a href="#product-desc" class="nav-item" data-module="product-desc">
+      <span class="nav-ico">✎</span><span class="nav-label">商品介绍生成</span>
+    </a>
+
+    <div class="nav-group">交易与服务</div>
+    <a href="#miniprogram" class="nav-item" data-module="miniprogram">
+      <span class="nav-ico">▢</span><span class="nav-label">电商小程序</span>
+    </a>
+    <a href="#booking" class="nav-item" data-module="booking">
+      <span class="nav-ico">▦</span><span class="nav-label">在线预约系统</span>
+    </a>
+    <a href="#life" class="nav-item" data-module="life">
+      <span class="nav-ico">☗</span><span class="nav-label">生活服务</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar">管</div>
+      <div class="user-info">
+        <div class="user-name">门店运营官</div>
+        <div class="user-role">打工人 · 全栈背锅侠</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ============ 主内容区 ============ -->
+<main class="main" id="main">
+  <header class="topbar">
+    <div class="crumbs">
+      <span class="crumb-root">零售智能中台</span>
+      <span class="crumb-sep">/</span>
+      <span class="crumb-current" id="crumbCurrent">数据看板</span>
+    </div>
+    <div class="topbar-actions">
+      <div class="search-box">
+        <span class="search-ico">⌕</span>
+        <input type="text" placeholder="搜点啥？功能、商品、用户都行…" id="globalSearch" />
+        <kbd>Ctrl K</kbd>
+      </div>
+      <button class="icon-btn" title="通知">
+        <span>🔔</span><i class="dot"></i>
+      </button>
+      <button class="theme-btn" id="themeBtn" title="切换主题">🌓</button>
+      <button class="primary-btn" id="newTaskBtn">+ 新建任务</button>
+    </div>
+  </header>
+
+  <section class="module-area">
+
+    <!-- ========= 数据看板 ========= -->
+    <div class="module active" id="module-dashboard">
+      <div class="module-head">
+        <div>
+          <h2>数据看板</h2>
+          <p class="muted">老板问业绩？一张图怼回去 · 实时更新</p>
+        </div>
+        <div class="head-actions">
+          <select class="select" id="rangeSelect">
+            <option value="7">近 7 天</option>
+            <option value="30" selected>近 30 天</option>
+            <option value="90">近 90 天</option>
+          </select>
+          <button class="ghost-btn" id="refreshBtn">↻ 刷新</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card" data-kpi="gmv">
+          <div class="kpi-label">GMV 总成交额</div>
+          <div class="kpi-value" id="kpiGmv">¥ 12,846,320</div>
+          <div class="kpi-trend up">▲ 18.6% 环比</div>
+        </div>
+        <div class="kpi-card" data-kpi="orders">
+          <div class="kpi-label">订单数</div>
+          <div class="kpi-value" id="kpiOrders">48,291</div>
+          <div class="kpi-trend up">▲ 9.2% 环比</div>
+        </div>
+        <div class="kpi-card" data-kpi="users">
+          <div class="kpi-label">活跃用户</div>
+          <div class="kpi-value" id="kpiUsers">126,580</div>
+          <div class="kpi-trend up">▲ 12.4% 环比</div>
+        </div>
+        <div class="kpi-card" data-kpi="conversion">
+          <div class="kpi-label">转化率</div>
+          <div class="kpi-value" id="kpiConv">3.82%</div>
+          <div class="kpi-trend down">▼ 0.3% 环比</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>GMV 趋势</h3>
+            <div class="tabs">
+              <button class="tab active" data-range="30">30天</button>
+              <button class="tab" data-range="90">90天</button>
+            </div>
+          </div>
+          <div class="chart-wrap"><canvas id="gmvChart"></canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>渠道占比</h3></div>
+          <div class="chart-wrap"><canvas id="channelChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>品类销售排行</h3></div>
+          <div class="rank-list" id="rankList"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>实时动态</h3></div>
+          <ul class="feed" id="feedList"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= 智慧门店 ========= -->
+    <div class="module" id="module-smart-store">
+      <div class="module-head">
+        <div><h2>智慧门店</h2><p class="muted">摄像头比店长还懂顾客 · 客流热力+陈列玄学</p></div>
+        <div class="head-actions">
+          <select class="select" id="storeSelect">
+            <option>上海·静安旗舰店</option>
+            <option>北京·三里屯店</option>
+            <option>深圳·海岸城店</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">今日客流</div><div class="kpi-value">2,184</div><div class="kpi-trend up">▲ 15%</div></div>
+        <div class="kpi-card"><div class="kpi-label">到店转化</div><div class="kpi-value">23.6%</div><div class="kpi-trend up">▲ 2.1%</div></div>
+        <div class="kpi-card"><div class="kpi-label">坪效(元/㎡)</div><div class="kpi-value">1,286</div><div class="kpi-trend up">▲ 8%</div></div>
+        <div class="kpi-card"><div class="kpi-label">设备在线率</div><div class="kpi-value">98.7%</div><div class="kpi-trend">— 稳定</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>门店热力图</h3><span class="badge">实时</span></div>
+          <div class="heatmap" id="heatmap"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>智能设备状态</h3></div>
+          <div class="device-grid" id="deviceGrid"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>陈列优化建议</h3><span class="badge badge-warn">AI 洞察</span></div>
+        <div class="suggest-list" id="suggestList"></div>
+      </div>
+    </div>
+
+    <!-- ========= 销量预测 ========= -->
+    <div class="module" id="module-forecast">
+      <div class="module-head">
+        <div><h2>销量预测</h2><p class="muted">AI 掐指一算：明天该进多少货 · 告别拍脑袋</p></div>
+        <div class="head-actions">
+          <select class="select" id="forecastSku">
+            <option>全品类</option>
+            <option>生鲜果蔬</option>
+            <option>日用百货</option>
+            <option>美妆个护</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">预测准确率</div><div class="kpi-value">92.4%</div><div class="kpi-trend up">▲ 3.1%</div></div>
+        <div class="kpi-card"><div class="kpi-label">未来7天销量</div><div class="kpi-value">142,680</div><div class="kpi-trend up">▲ 11%</div></div>
+        <div class="kpi-card"><div class="kpi-label">缺货风险 SKU</div><div class="kpi-value" style="color:var(--danger)">7</div><div class="kpi-trend down">▼ 较昨日 -2</div></div>
+        <div class="kpi-card"><div class="kpi-label">建议补货量</div><div class="kpi-value">38,420</div><div class="kpi-trend">基于预测</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>实际销量 vs 预测销量</h3>
+          <div class="legend"><i style="background:#6366f1"></i>实际<i style="background:#22d3ee"></i>预测</div>
+        </div>
+        <div class="chart-wrap"><canvas id="forecastChart"></canvas></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>预测因子贡献</h3></div>
+        <div class="factor-bars" id="factorBars"></div>
+      </div>
+    </div>
+
+    <!-- ========= 用户行为分析 ========= -->
+    <div class="module" id="module-behavior">
+      <div class="module-head">
+        <div><h2>用户行为分析</h2><p class="muted">用户到底在想啥？漏斗+画像帮你猜透他</p></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>转化漏斗</h3></div>
+          <div class="funnel" id="funnel"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>用户画像</h3></div>
+          <div class="persona">
+            <div class="persona-head">
+              <div class="avatar lg">李</div>
+              <div>
+                <div class="persona-name">李女士 · 28岁</div>
+                <div class="muted">高价值会员 · 偏好美妆个护</div>
+              </div>
+            </div>
+            <div class="tags">
+              <span class="tag">月均消费 ¥1,280</span>
+              <span class="tag">复购率 68%</span>
+              <span class="tag">活跃时段 20-22点</span>
+              <span class="tag">一线城市</span>
+              <span class="tag">价格敏感度 中</span>
+            </div>
+            <div class="chart-wrap"><canvas id="personaChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>用户路径还原</h3></div>
+        <div class="journey" id="journey"></div>
+      </div>
+    </div>
+
+    <!-- ========= 广告个性化 ========= -->
+    <div class="module" id="module-ads">
+      <div class="module-head">
+        <div><h2>广告个性化</h2><p class="muted">千人千面投其所好 · 广告费再也不打水漂</p></div>
+        <button class="primary-btn" id="createCampaign">+ 新建广告计划</button>
+      </div>
+
+      <div class="campaign-grid" id="campaignGrid"></div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>投放效果趋势</h3></div>
+        <div class="chart-wrap"><canvas id="adsChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ========= 商品搜索推荐 ========= -->
+    <div class="module" id="module-search">
+      <div class="module-head">
+        <div><h2>商品搜索推荐</h2><p class="muted">比你妈还懂你想要啥 · 语义搜索+猜你喜欢</p></div>
+      </div>
+
+      <div class="search-hero">
+        <div class="search-box lg">
+          <span class="search-ico">⌕</span>
+          <input type="text" id="productSearch" placeholder="试试：夏天穿的轻薄透气运动鞋（AI 能听懂人话）" />
+          <button class="primary-btn" id="doSearch">搜索</button>
+        </div>
+        <div class="hot-words">
+          <span class="muted">热门：</span>
+          <span class="hot-word">蓝牙耳机</span>
+          <span class="hot-word">防晒衣</span>
+          <span class="hot-word">空气炸锅</span>
+          <span class="hot-word">儿童奶粉</span>
+          <span class="hot-word">口红</span>
+          <span class="hot-word">蓝莓</span>
+          <span class="hot-word">扫地机器人</span>
+          <span class="hot-word">纸尿裤</span>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>搜索结果</h3><span class="muted" id="resultCount">共 0 件商品</span></div>
+          <div class="product-list" id="productList"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>为你推荐</h3><span class="badge">AI 个性化</span></div>
+          <div class="recommend-list" id="recommendList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= 数字员工 ========= -->
+    <div class="module" id="module-digital-employee">
+      <div class="module-head">
+        <div><h2>数字员工</h2><p class="muted">007 打工仔从不摸鱼 · AI 帮你干活到天亮</p></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>数字员工列表</h3></div>
+          <div class="employee-list" id="employeeList"></div>
+        </div>
+        <div class="panel chat-panel">
+          <div class="chat-head">
+            <div class="avatar lg" style="background:linear-gradient(135deg,#a78bfa,#22d3ee)">AI</div>
+            <div>
+              <div class="persona-name">小智 · 运营助理</div>
+              <div class="muted"><span class="status-dot"></span> 在线 · 响应 < 1s</div>
+            </div>
+          </div>
+          <div class="chat-body" id="chatBody"></div>
+          <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="直接说问题就行，比如：我要退货 / 查物流 / 怎么退款" />
+            <button class="primary-btn" id="chatSend">发送</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= 售前售后客服 ========= -->
+    <div class="module" id="module-service">
+      <div class="module-head">
+        <div><h2>售前售后客服</h2><p class="muted">客户发火也能笑眯眯搞定 · 智能工单+情绪雷达</p></div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">今日会话</div><div class="kpi-value">1,284</div></div>
+        <div class="kpi-card"><div class="kpi-label">平均响应</div><div class="kpi-value">1.2s</div></div>
+        <div class="kpi-card"><div class="kpi-label">满意度</div><div class="kpi-value">96.8%</div></div>
+        <div class="kpi-card"><div class="kpi-label">待处理工单</div><div class="kpi-value" style="color:var(--danger)">23</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>会话列表</h3></div>
+          <div class="ticket-list" id="ticketList"></div>
+        </div>
+        <div class="panel chat-panel">
+          <div class="chat-head">
+            <div class="avatar lg">王</div>
+            <div>
+              <div class="persona-name">王先生</div>
+              <div class="muted"><span class="emotion-tag angry">😠 愤怒</span> 订单 #2026091388 · 售后</div>
+            </div>
+          </div>
+          <div class="chat-body" id="serviceChat"></div>
+          <div class="quick-replies" id="quickReplies"></div>
+          <div class="chat-input">
+            <input type="text" placeholder="输入回复…" />
+            <button class="primary-btn">发送</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= 文案视频设计 ========= -->
+    <div class="module" id="module-copy-design">
+      <div class="module-head">
+        <div><h2>文案视频设计</h2><p class="muted">文案视频一键出 · 乙方看了都下岗</p></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>生成参数</h3></div>
+          <div class="form">
+            <label>商品 / 主题</label>
+            <input type="text" id="aiTheme" value="新款夏季轻薄防晒衣" />
+            <label>内容类型</label>
+            <div class="chip-group" id="contentType">
+              <span class="chip active" data-type="文案">营销文案</span>
+              <span class="chip" data-type="海报">海报</span>
+              <span class="chip" data-type="小红书">小红书种草</span>
+            </div>
+            <label>风格</label>
+            <select class="select" id="aiStyle">
+              <option>活力年轻</option>
+              <option>高端轻奢</option>
+              <option>温馨治愈</option>
+              <option>专业严谨</option>
+            </select>
+            <label>目标人群</label>
+            <input type="text" id="aiAudience" value="25-35岁都市女性" />
+            <button class="primary-btn block" id="genContent">✨ AI 生成</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>生成结果</h3>
+            <div class="head-actions">
+              <button class="ghost-btn" id="copyResult">复制</button>
+            </div>
+          </div>
+          <div class="gen-result" id="genResult">
+            <div class="empty-hint">点一下「AI 生成」，乙方文案马上到位 👇</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>素材库模板</h3></div>
+        <div class="template-grid" id="templateGrid"></div>
+      </div>
+    </div>
+
+    <!-- ========= 商品介绍生成 ========= -->
+    <div class="module" id="module-product-desc">
+      <div class="module-head">
+        <div><h2>商品介绍生成</h2><p class="muted">详情页文案秒出 · 运营再也不用熬夜抠字</p></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>商品信息</h3></div>
+          <div class="form">
+            <label>商品名称</label>
+            <input type="text" id="pdName" value="无线降噪蓝牙耳机 Pro" />
+            <label>核心卖点（逗号分隔）</label>
+            <input type="text" id="pdFeatures" value="主动降噪,40小时续航,蓝牙5.3,IPX5防水,空间音频" />
+            <label>目标平台</label>
+            <div class="chip-group" id="pdPlatform">
+              <span class="chip active">淘宝天猫</span>
+              <span class="chip">京东</span>
+              <span class="chip">抖音小店</span>
+              <span class="chip">拼多多</span>
+            </div>
+            <label>字数</label>
+            <input type="range" id="pdLength" min="100" max="800" value="400" />
+            <div class="range-val"><span id="pdLenVal">400</span> 字</div>
+            <button class="primary-btn block" id="genDesc">✨ 生成商品介绍</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>生成结果</h3>
+            <div class="head-actions"><button class="ghost-btn" id="copyDesc">复制</button></div>
+          </div>
+          <div class="desc-result" id="descResult">
+            <div class="empty-hint">填好商品信息点生成，详情页文案分分钟搞定</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= 电商小程序 ========= -->
+    <div class="module" id="module-miniprogram">
+      <div class="module-head">
+        <div><h2>电商小程序</h2><p class="muted">手机里的小店 · 装修比发朋友圈还简单</p></div>
+        <button class="primary-btn">发布新版本</button>
+      </div>
+
+      <!-- 智能调度：用户输入意图，直达对应页面 -->
+      <div class="dispatch-panel">
+        <div class="dispatch-input-row">
+          <input type="text" id="dispatchInput" class="input" placeholder="告诉我你想做什么，比如「我要买防晒衣」「查一下昨天的订单物流」「附近有没有门店能自提」" />
+          <button class="primary-btn" id="dispatchBtn">智能打开</button>
+        </div>
+        <div class="dispatch-quick">
+          <span class="quick-tag" onclick="quickDispatch('我要买防晒霜')">买商品</span>
+          <span class="quick-tag" onclick="quickDispatch('有没有优惠券')">找优惠</span>
+          <span class="quick-tag" onclick="quickDispatch('查下我昨天的订单')">查订单</span>
+          <span class="quick-tag" onclick="quickDispatch('这个能退货吗')">售后</span>
+          <span class="quick-tag" onclick="quickDispatch('附近有门店吗我想自提')">附近门店</span>
+          <span class="quick-tag" onclick="quickDispatch('我要预约空调安装')">预约服务</span>
+        </div>
+        <div class="dispatch-summary" id="dispatchSummary">👋 在上方输入你想做的事，小程序会直接打开对应页面</div>
+      </div>
+
+      <div class="mini-wrap">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="mini-content" id="miniContent">
+            <div class="mini-header">
+              <span>优选商城</span>
+              <span class="mini-search">⌕ 搜索商品</span>
+            </div>
+            <div class="mini-banner">🔥 品牌日 · 满300减50，不买亏一个亿</div>
+            <div class="mini-cats" id="miniCats"></div>
+            <div class="mini-products" id="miniProducts"></div>
+            <div class="mini-tabbar">
+              <div class="mini-tab active">🏠 首页</div>
+              <div class="mini-tab">🗂 分类</div>
+              <div class="mini-tab">🛒 购物车</div>
+              <div class="mini-tab">👤 我的</div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-config">
+          <div class="panel">
+            <div class="panel-head"><h3>小程序数据</h3></div>
+            <div class="kpi-grid small">
+              <div class="kpi-card"><div class="kpi-label">日活</div><div class="kpi-value">12,840</div></div>
+              <div class="kpi-card"><div class="kpi-label">下单转化</div><div class="kpi-value">6.2%</div></div>
+              <div class="kpi-card"><div class="kpi-label">客单价</div><div class="kpi-value">¥168</div></div>
+              <div class="kpi-card"><div class="kpi-label">留存(7日)</div><div class="kpi-value">42%</div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>装修组件</h3></div>
+            <div class="component-list">
+              <div class="comp-item"><span>🎨</span> 轮播图 <button class="ghost-btn sm" onclick="openCompEditor('banner')">编辑</button></div>
+              <div class="comp-item"><span>🗂</span> 分类导航 <button class="ghost-btn sm" onclick="openCompEditor('cats')">编辑</button></div>
+              <div class="comp-item"><span>🔥</span> 秒杀专区 <button class="ghost-btn sm" onclick="openCompEditor('seckill')">编辑</button></div>
+              <div class="comp-item"><span>🎁</span> 优惠券 <button class="ghost-btn sm" onclick="openCompEditor('coupon')">编辑</button></div>
+              <div class="comp-item"><span>📦</span> 商品瀑布流 <button class="ghost-btn sm" onclick="openCompEditor('products')">编辑</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= 在线预约系统 ========= -->
+    <div class="module" id="module-booking">
+      <div class="module-head">
+        <div><h2>在线预约系统</h2><p class="muted">档期排得明明白白 · 再也不怕撞车放鸽子</p></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>预约日历</h3>
+            <div class="head-actions">
+              <button class="ghost-btn sm" id="prevMonth">‹</button>
+              <span id="calTitle"></span>
+              <button class="ghost-btn sm" id="nextMonth">›</button>
+            </div>
+          </div>
+          <div class="calendar" id="calendar"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>时段选择</h3><span class="muted" id="selectedDate">请选择日期</span></div>
+          <div class="service-picker" id="servicePicker"></div>
+          <div class="slot-grid" id="slotGrid"></div>
+          <button class="primary-btn block" id="confirmBooking" style="margin-top:16px">确认预约</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>近期预约</h3></div>
+        <div class="booking-list" id="bookingList"></div>
+      </div>
+    </div>
+
+    <!-- ========= 生活服务 ========= -->
+    <div class="module" id="module-life">
+      <div class="module-head">
+        <div><h2>生活服务</h2><p class="muted">吃喝玩乐一条龙 · 到店核销不排队</p></div>
+      </div>
+
+      <div class="life-sections" id="lifeCats"></div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>附近优质商家</h3>
+          <select class="select sm" id="merchantSort"><option value="distance">距离最近</option><option value="rating">评分最高</option><option value="sales">销量优先</option></select>
+        </div>
+        <div class="merchant-list" id="merchantList"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><h3>会员权益</h3></div>
+          <div class="benefit-list" id="benefitList"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>到店核销</h3></div>
+          <div class="verify-box">
+            <div class="qr-box" id="qrBox">
+              <div class="qr-pattern"></div>
+            </div>
+            <div class="muted">出示二维码给商家核销</div>
+            <button class="primary-btn block" id="refreshQr">刷新核销码</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- 预约成功弹窗 -->
+<div class="bk-modal" id="bkSuccessModal" onclick="if(event.target===this)closeBkSuccess()">
+  <div class="bk-modal-inner success">
+    <div class="bk-success-head">
+      <div class="bk-success-icon">✓</div>
+      <h3>预约提交成功</h3>
+      <p class="muted">门店已收到你的预约，期待到店~</p>
+    </div>
+    <div class="bk-detail" id="bkSuccessDetail"></div>
+    <div class="bk-success-actions">
+      <button class="ghost-btn" onclick="closeBkSuccess()">知道了</button>
+      <button class="primary-btn" onclick="closeBkSuccess();scrollToBooking()">查看我的预约</button>
+    </div>
+  </div>
+</div>
+
+<!-- 取消预约确认弹窗 -->
+<div class="bk-modal" id="bkCancelModal" onclick="if(event.target===this)closeBkCancel()">
+  <div class="bk-modal-inner">
+    <div class="bk-cancel-head">
+      <h3>确认取消预约？</h3>
+      <p class="muted">取消后门店将释放该时段档期</p>
+    </div>
+    <div class="bk-cancel-rule">
+      <div class="rule-title">取消规则</div>
+      <ul>
+        <li>预约开始前 <b>2 小时</b> 可免费取消，不收取任何费用</li>
+        <li>距离开始不足 2 小时 <b>不可取消</b>，如需变更请联系门店</li>
+        <li>取消后该时段将立即释放，其他用户可重新预约</li>
+      </ul>
+    </div>
+    <div id="bkCancelTarget" class="muted"></div>
+    <div class="bk-success-actions">
+      <button class="ghost-btn" onclick="closeBkCancel()">再想想</button>
+      <button class="danger-btn" id="bkConfirmCancel">确认取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 视频播放器弹窗 -->
+<div class="vp-modal" id="videoPlayerModal" onclick="if(event.target===this)closeVideoPlayer()">
+  <div class="vp-modal-inner">
+    <div class="vp-header">
+      <span class="vp-title" id="vpTitle">视频预览</span>
+      <button class="vp-close" onclick="closeVideoPlayer()">✕</button>
+    </div>
+    <div class="vp-stage">
+      <img id="vpImage" src="" alt="视频画面" />
+      <div class="vp-overlay" id="vpOverlay"></div>
+      <div class="vp-center-play" onclick="toggleVideoPlay()" id="vpCenterPlay">▶</div>
+    </div>
+    <div class="vp-controls">
+      <button class="vp-btn" id="vpPlayBtn" onclick="toggleVideoPlay()">▶</button>
+      <div class="vp-progress" id="vpProgressBar" onclick="seekVideo(event)">
+        <div class="vp-progress-fill" id="vpProgressFill"></div>
+      </div>
+      <span class="vp-time" id="vpTime">00:00 / 00:15</span>
+    </div>
+    <div class="vp-footer">
+      <span class="vp-tag">短视频预览 · 模拟播放</span>
+      <button class="vp-export" onclick="toast('已导出到视频号草稿箱~','success')">一键导出</button>
+    </div>
+  </div>
+</div>
+
+<!-- 装修组件编辑弹窗 -->
+<div class="vp-modal" id="compEditorModal" onclick="if(event.target===this)closeCompEditor()">
+  <div class="vp-content comp-editor">
+    <div class="vp-head">
+      <span id="compEditorTitle">编辑组件</span>
+      <button class="vp-close" onclick="closeCompEditor()">✕</button>
+    </div>
+    <div class="comp-editor-body" id="compEditorBody"></div>
+    <div class="vp-footer">
+      <button class="ghost-btn" onclick="closeCompEditor()">取消</button>
+      <button class="primary-btn" onclick="saveCompEditor()">保存并预览</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js?v=39"></script>
+<script src="js/app.js?v=39"></script>
+<script src="js/modules/smart-store.js?v=39"></script>
+<script src="js/modules/forecast.js?v=39"></script>
+<script src="js/modules/behavior.js?v=39"></script>
+<script src="js/modules/ads.js?v=39"></script>
+<script src="js/modules/search.js?v=39"></script>
+<script src="js/modules/digital-employee.js?v=39"></script>
+<script src="js/modules/service.js?v=39"></script>
+<script src="js/modules/copy-design.js?v=39"></script>
+<script src="js/modules/product-desc.js?v=39"></script>
+<script src="js/modules/miniprogram.js?v=39"></script>
+<script src="js/modules/booking.js?v=39"></script>
+<script src="js/modules/life.js?v=39"></script>
+</body>
+</html>
